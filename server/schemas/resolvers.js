@@ -28,35 +28,35 @@ const resolvers = {
 			}
 
 			const correctPw = await user.isCorrectPassword(password);
-            if(!correctPw) {
-                throw new AuthenticaitonError("Incorrect Credentials");
-            }
+			if (!correctPw) {
+				throw new AuthenticaitonError("Incorrect Credentials");
+			}
 
-            const token = signToken(user);
-            return {token, user};
+			const token = signToken(user);
+			return { token, user };
 		},
-        saveBook: async (parent, args, context) => {
-            if(context.user) {
-                const updateUser = await User.findOneAndUpdate(
-                    {_id: context.user._id},
-                    {$push: {savedBooks: args}},
-                    {new: true, runValidators: true}
-                );
-                return updateUser;
-            }
-            throw new AuthenticaitonError("You need to be logged in!")
-        },
-        removeBook: async (parent, {bookId}, context) => {
-            if(context.user) {
-                const updateUser = await User.findOneAndUpdate(
-                    {_id: context.user._id},
-                    {$pull: {savedBooks: {bookId: bookId}}},
-                    {new: true}
-                );
-                return updateUser;
-            }
-            throw new AuthenticaitonError("You need to be logged in!")
-        }
+		saveBook: async (parent, args, context) => {
+			if (context.user) {
+				const updateUser = await User.findOneAndUpdate(
+					{ _id: context.user._id },
+					{ $push: { savedBooks: args } },
+					{ new: true, runValidators: true }
+				);
+				return updateUser;
+			}
+			throw new AuthenticaitonError("You need to be logged in!");
+		},
+		removeBook: async (parent, { bookId }, context) => {
+			if (context.user) {
+				const updateUser = await User.findOneAndUpdate(
+					{ _id: context.user._id },
+					{ $pull: { savedBooks: { bookId: bookId } } },
+					{ new: true }
+				);
+				return updateUser;
+			}
+			throw new AuthenticaitonError("You need to be logged in!");
+		},
 	},
 };
 
